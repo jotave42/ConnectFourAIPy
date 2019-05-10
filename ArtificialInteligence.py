@@ -3,7 +3,12 @@ import math
 class ArtificialIntelligence:
     def __init__(self):
         self.EVALUATIONTABLE = []
-        self.EVALUATIONTABLE.append([3, 4, 5, 7, 5, 4, 3],[4, 6, 8, 10, 8, 6, 4],[5, 8, 11, 13, 11, 8, 5],[5, 8, 11, 13, 11, 8, 5],[4, 6, 8, 10, 8, 6, 4],[3, 4, 5, 7, 5, 4, 3])
+        self.EVALUATIONTABLE.append([3, 4, 5, 7, 5, 4, 3],
+                                    [4, 6, 8, 10, 8, 6, 4],
+                                    [5, 8, 11, 13, 11, 8, 5],
+                                    [5, 8, 11, 13, 11, 8, 5],
+                                    [4, 6, 8, 10, 8, 6, 4],
+                                    [3, 4, 5, 7, 5, 4, 3])
     
     def evaluateContent(gBorde, player1Icon, player2Icon):
         utility = 138
