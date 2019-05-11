@@ -1,38 +1,53 @@
+from termcolor import colored, cprint
 class Board():
     gameBord=[]
     __lastRow = 6
-    def __init__(self, gameBordToCopy):
-        for row in range(6):
-            cols=[]
-            for col in range(7):
-                cols.append(gameBordToCopy[row],[col])
-            self.gameBord(cols)
-
-    def __init__(self):
+    def __init__(self, gameBordToCopy = None):
         self.gameBord=[]
-        for row in range(6):
-            cols =[]
-            for col  in range(7):
-                cols.append(0)
-            self.gameBord(cols)
+        if(gameBordToCopy):
+            for row in range(6):
+                cols=[]
+                for col in range(7):
+                    cols.append(gameBordToCopy[row][col])
+                self.gameBord.append(cols)
+        else:
+            for row in range(6):
+                cols =[]
+                for col  in range(7):
+                    cols.append(0)
+                self.gameBord.append(cols)
     
     def addable(self,col):
         i = 0
         while(i < 6 and self.gameBord[i][col] == 0  ):
             i+=1
-
         self.__lastRow = i
         if(i != 0 ):
             return True
         return False
     def addPiece(self, col , playerIcon):
         if(self.addable(col)):
-            self.gameBord[self.__lastRow][col] = playerIcon
+            self.gameBord[self.__lastRow-1][col] = playerIcon
+            return self.__lastRow
+        else:
+            return -1
     
     def showBord(self):
-        for row  in self.Board:
+        for row  in self.gameBord:
             print(row)
 
+    def showBord(self,player1Icon,player2Icon):
+        for row  in self.gameBord:
+            line = "[ "
+            for col in row:
+                if(col == player1Icon):
+                    line += colored(col, 'red')+" "
+                elif (col == player2Icon):
+                    line += colored(col, 'green')+" "
+                else:
+                    line += colored(col, 'white')+" "
+            line += "]"
+            print(line)
     def checkVerticalStreaks(self, playerIcon):
         for colum in range(7):
             currentStreak = 0
@@ -43,7 +58,6 @@ class Board():
                         return True
                 else:
                     currentStreak =0
-
         return False
 
     def checkHorizontalStreaks(self, playerIcon):
@@ -73,7 +87,8 @@ class Board():
         return False
 
     def chekWin(self, playerIcon):
-        return checkVerticalStreaks(playerIcon) or checkHorizontalStreaks(playerIcon) or checkMDiagonalStreaks( playerIcon) or checkSDiagonalStreaks(playerIcon)
+        win = self.checkVerticalStreaks(playerIcon) or self.checkHorizontalStreaks(playerIcon) or self.checkMDiagonalStreaks( playerIcon) or self.checkSDiagonalStreaks(playerIcon)
+        return win
 
-
-    
+    def getLastRow(self):
+        return self.__lastRow
