@@ -57,7 +57,7 @@ class Board():
                     if (currentStreak == 4):
                         return True
                 else:
-                    currentStreak =0
+                    currentStreak = 0
         return False
 
     def checkHorizontalStreaks(self, playerIcon):
