@@ -2,24 +2,27 @@ from termcolor import colored, cprint
 class Board():
     gameBord=[]
     __lastRow = 6
+    width = 7
+    height = 6
+
     def __init__(self, gameBordToCopy = None):
         self.gameBord=[]
         if(gameBordToCopy):
-            for row in range(6):
+            for row in range(self.height):
                 cols=[]
-                for col in range(7):
+                for col in range(self.width):
                     cols.append(gameBordToCopy[row][col])
                 self.gameBord.append(cols)
         else:
-            for row in range(6):
+            for row in range(self.height):
                 cols =[]
-                for col  in range(7):
+                for col  in range(self.width):
                     cols.append(0)
                 self.gameBord.append(cols)
     
     def addable(self,col):
         i = 0
-        while(i < 6 and self.gameBord[i][col] == 0  ):
+        while(i < self.height and self.gameBord[i][col] == 0  ):
             i+=1
         self.__lastRow = i
         if(i != 0 ):
@@ -49,9 +52,9 @@ class Board():
             line += "]"
             print(line)
     def checkVerticalStreaks(self, playerIcon):
-        for colum in range(7):
+        for colum in range(self.width):
             currentStreak = 0
-            for row in range(6):
+            for row in range(self.height):
                 if (self.gameBord[row][colum] == playerIcon):
                     currentStreak += 1
                     if (currentStreak == 4):
@@ -63,7 +66,7 @@ class Board():
     def checkHorizontalStreaks(self, playerIcon):
         for row in self.gameBord:
             currentStreak = 0
-            for colum in range(7):
+            for colum in range(self.width):
                 if (row[colum] == playerIcon):
                     currentStreak +=1
                     if (currentStreak == 4):
