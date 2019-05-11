@@ -38,6 +38,7 @@ def main():
                 socre[col] = 1000000
                 continue
             socre[col] =  aI.minMax(gBoard.gameBord , 9, -9000, 9000, True, player1.playerIcon, player2.playerIcon)
+        print(socre)
         board.addPiece(getMin(socre),player2.playerIcon)
         if(board.chekWin(player2.playerIcon)):
             print("PLAYER 2 GANHOU")

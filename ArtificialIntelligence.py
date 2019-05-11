@@ -23,12 +23,15 @@ class ArtificialIntelligence:
 
     def minMax(self,gBorde, depth, alph, beta, maximazingPlayer, player1Icon, player2Icon):
         if(depth == 0):
+            print("EVALUATE: ",self.evaluateContent(gBorde, player1Icon, player2Icon))
             return self.evaluateContent(gBorde, player1Icon, player2Icon)
+        print("MINMAX --->DETPH: ",depth)
         if(maximazingPlayer):
             value = -9000
             for i in range(7):
                 board =  Board(gBorde) 
                 board.addPiece(i,player1Icon)
+                board.showBord(player1Icon,player2Icon)
                 value = max(value, self.minMax(board.gameBord, depth-1, alph, beta, False, player1Icon, player2Icon))
                 alph = max(value, alph)
                 if(alph >= beta):
@@ -39,8 +42,9 @@ class ArtificialIntelligence:
             for i in range(7):
                 board =  Board(gBorde) 
                 board.addPiece(i,player2Icon)
-                value = max(value, self.minMax(board.gameBord, depth-1, alph, beta, True, player1Icon, player2Icon))
-                alph = max(value, alph)
+                board.showBord(player1Icon,player2Icon)
+                value = min(value, self.minMax(board.gameBord, depth-1, alph, beta, True, player1Icon, player2Icon))
+                alph = min(value, alph)
                 if(alph >= beta):
                     break
             return value
