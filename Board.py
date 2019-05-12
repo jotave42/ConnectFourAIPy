@@ -1,3 +1,4 @@
+from ConnectFour import *
 from termcolor import colored, cprint
 class Board():
     gameBord=[]
@@ -5,8 +6,10 @@ class Board():
     width = 7
     height = 6
 
+
     def __init__(self, gameBordToCopy = None):
         self.gameBord=[]
+        self.turn = getTurn()
         if(gameBordToCopy):
             for row in range(self.height):
                 cols=[]
