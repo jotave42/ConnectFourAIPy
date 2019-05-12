@@ -140,7 +140,7 @@ class Board():
             print(row)
 
     def showBord(self,player1Icon,player2Icon):
-        print("\n================================")
+        print("\n=================")
         for row  in self.gameBoard:
             line = "[ "
             for col in row:
@@ -152,7 +152,7 @@ class Board():
                     line += colored(col, 'white')+" "
             line += "]"
             print(line)
-        print("================================\n")
+        print("=================\n")
     def checkVerticalStreaks(self, playerIcon):
         for colum in range(7):
             currentStreak = 0
