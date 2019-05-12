@@ -23,29 +23,31 @@ def main():
             print("Estado Atual do Tabuleiro: ")
             board.showBord(player1.playerIcon, player2.playerIcon)
             playerInput = int (input("Digite a coluna: "))
+            print("turn befor add-->",board.getTurn())
             piece = board.addPiece(playerInput,player1.playerIcon)
+            print("turn AFTER add-->",board.getTurn())
             if(piece < 0):
                 print("POSICAO INVALIDA")
         row = piece
         col = playerInput
         #aI.updateEvaluation(row,col,player1.playerAI)
-        board.showBord(player1.playerIcon, player2.playerIcon)
         if (board.chekWin(player1.playerIcon)):
             print("PLAYER 1 GANHOU")
             board.showBord(player1.playerIcon, player2.playerIcon)
             break
+        board.showBord(player1.playerIcon, player2.playerIcon)
 
-        '''aiCol = aI.getNextPosition(board.gameBord)
+        aiCol = aI.getNextPosition(board,7,player1.playerIcon,player2.playerIcon)
         piece = board.addPiece(aiCol,player2.playerIcon)
         row = piece
-        aI.updateEvaluation(row,aiCol, player2.playerAI)
-        board.showBord(player1.playerIcon, player2.playerIcon)
+        #aI.updateEvaluation(row,aiCol, player2.playerAI)
         if (board.chekWin(player2.playerIcon)):
             print("PLAYER 2 GANHOU")
             board.showBord(player1.playerIcon, player2.playerIcon)
-            break'''
+            break
+        board.showBord(player1.playerIcon, player2.playerIcon)
         
-        iaCol = aI.getNextPosition(board,player1.playerIcon,player2.playerIcon)
+        '''iaCol = aI.getNextPosition(board,player1.playerIcon,player2.playerIcon)
         for col in range(7):
             gBoard = Board(board.gameBord)
             gBoard.addPiece(col,player2.playerIcon)
@@ -59,7 +61,7 @@ def main():
         if(board.chekWin(player2.playerIcon)):
             print("PLAYER 2 GANHOU")
             board.showBord(player1.playerIcon, player2.playerIcon)
-            break
+            break'''
     return 0
 
 main()
