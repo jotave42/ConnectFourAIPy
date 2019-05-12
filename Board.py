@@ -4,11 +4,12 @@ class Board():
     __lastRow = 6
     width = 7
     height = 6
+    turn= 1
 
 
     def __init__(self, gameBordToCopy = None):
         self.gameBord=[]
-        self.turn = getTurn()
+        self.turn = self.getTurn()
         if(gameBordToCopy):
             for row in range(self.height):
                 cols=[]
@@ -99,3 +100,9 @@ class Board():
 
     def getLastRow(self):
         return self.__lastRow
+
+    def getTurn(self):
+        return(self.turn)
+
+    def setTurn(self,vl):
+        self.turn = vl

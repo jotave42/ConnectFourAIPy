@@ -3,11 +3,12 @@ import time
 import math
 import random
 
-class Mcts:
+class Mcts():
     def __init__(self, time):
+        board = Board()
         self.width = Board.width
         self.time = time
-        self.root = MctsNode(None,self.board);
+        self.root = MctsNode(None,board);
 
     def update(self,move):
         if(self.root.children[move] != None):
@@ -16,15 +17,16 @@ class Mcts:
             self.root = MctsNode(None,self.root.board.addable(move))
 
     def getOptimalMove(self):
-        stop = time.clock_gettime_ns() + self.time
-        par = time.clock_gettime_ns()
+        stop = time.time() + self.time
+        par = time.time()
         while(stop > par):
-            self.selectNode = MctsNode.select
-            if(self.selectNode == None):
-                self.expandedNode = MctsNode.simulate(self.selectNode)
-                self.result = MctsNode.simulate(self.expandedNode)
-                MctsNode.backPropagate(self.expandedNode,self.result)
-            par = time.clock_gettime_ns()
+
+            selectNode = Mcts.select(self,self.root)
+            if(selectNode == None):
+                expandedNode = Mcts.simulate(self.selectNode)
+                result = Mcts.simulate(self.expandedNode)
+                Mcts.backPropagate(expandedNode,result)
+            par = time.time()
         maxIndex = -1
 
         for i in range (0,Board.width,1):
@@ -40,6 +42,7 @@ class Mcts:
 
     def select(self, parent):
 
+        print(parent.children[0],  "ha")
         for i in range(0,Board.width,1):
             if(parent.children[i] == None and parent.board.addable(i)):
                 return parent
@@ -96,7 +99,7 @@ class Mcts:
 
 
 
-class MctsNode:
+class MctsNode():
 
     def __init__(self,parent,board):
         self.parent = parent

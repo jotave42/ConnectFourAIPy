@@ -1,6 +1,6 @@
 from Board import *
 import math
-class ArtificialIntelligence:
+class ArtificialIntelligence():
     def __init__(self):
         self.EVALUATIONTABLE = []
         self.EVALUATIONTABLE.append([3, 4, 5, 7, 5, 4, 3])
