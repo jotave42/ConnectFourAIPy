@@ -28,6 +28,7 @@ class Board():
         if(i != 0 ):
             return True
         return False
+
     def addPiece(self, col , playerIcon):
         if(self.addable(col)):
             self.gameBord[self.__lastRow-1][col] = playerIcon
@@ -51,6 +52,7 @@ class Board():
                     line += colored(col, 'white')+" "
             line += "]"
             print(line)
+
     def checkVerticalStreaks(self, playerIcon):
         for colum in range(self.width):
             currentStreak = 0
