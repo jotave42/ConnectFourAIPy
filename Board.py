@@ -1,4 +1,3 @@
-from ConnectFour import *
 from termcolor import colored, cprint
 class Board():
     gameBord=[]
