@@ -21,13 +21,13 @@ class Board():
         i = 0
         while(i < 6 and self.gameBord[i][col] == 0  ):
             i+=1
-        self.__lastRow = i
+        self.__lastRow = i -1
         if(i != 0 ):
             return True
         return False
     def addPiece(self, col , playerIcon):
         if(self.addable(col)):
-            self.gameBord[self.__lastRow-1][col] = playerIcon
+            self.gameBord[self.__lastRow][col] = playerIcon
             return self.__lastRow
         else:
             return -1

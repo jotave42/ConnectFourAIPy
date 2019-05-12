@@ -26,12 +26,15 @@ def main():
             piece = board.addPiece(playerInput,player1.playerIcon)
             if(piece < 0):
                 print("POSICAO INVALIDA")
+        row = piece
+        col = playerInput
+        aI.updateEvaluation(row,col,player1.playerAI)
         board.showBord(player1.playerIcon, player2.playerIcon)
         if (board.chekWin(player1.playerIcon)):
             print("PLAYER 1 GANHOU")
             board.showBord(player1.playerIcon, player2.playerIcon)
             break
-        for col in range(7):
+        '''for col in range(7):
             gBoard = Board(board.gameBord)
             gBoard.addPiece(col,player2.playerIcon)
             if (gBoard.chekWin(player2.playerIcon)):
@@ -43,7 +46,7 @@ def main():
         if(board.chekWin(player2.playerIcon)):
             print("PLAYER 2 GANHOU")
             board.showBord(player1.playerIcon, player2.playerIcon)
-            break
+            break'''
     return 0
 
 main()
