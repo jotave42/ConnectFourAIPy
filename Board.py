@@ -11,10 +11,8 @@ class Board():
         self.gameBoard=[]
         self.evaluationTable=[]
         self.deltaEvaluationTable=[]
-        #print("turncopy ------>",turnCopy)
         if(turnCopy!=None):
             self.turn = turnCopy
-            #print("turn copiado---->",self.turn)
         if((gameBordToCopy)and(evaluationTableCopy)):
             for row in range(6):
                 cols=[]
@@ -116,7 +114,6 @@ class Board():
         return False
 
     def addPieceSumulation(self, col , player1Icon,player2Icon):
-        #print("Simulation entrei con---->",self.getTurn())
         if(self.addable(col)):
             if(self.getTurn()==1):
                 self.gameBoard[self.__lastRow][col] = player1Icon
@@ -124,20 +121,17 @@ class Board():
             else:
                 self.gameBoard[self.__lastRow][col] = player2Icon
                 self.setTurn(1)
-            #print("Simulation SAI con---->",self.getTurn())
             return self.__lastRow
         else:
             return -1
     
     def addPiece(self, col , playerIcon):
-        #print(self.getTurn())
         if(self.addable(col)):
             self.gameBoard[self.__lastRow][col] = playerIcon
             if(self.getTurn()==1):
                 self.setTurn(0)
             else:
                 self.setTurn(1)
-            #print(self.getTurn())
             return self.__lastRow
         else:
             return -1

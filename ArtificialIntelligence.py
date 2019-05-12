@@ -97,12 +97,8 @@ class ArtificialIntelligence:
         return bestOption
 
     def minMax2(self, board, depth, player1Icon,player2Icon ,maximazingPlayer, alpha,beta): #player2 eh ia
-        #print()
-        #print("========================minmax detph-->"+str(depth)+"===============")
-        #print("depth --->",depth)
         final = board.chekFinal(player1Icon,player2Icon)
         if(final != -1):
-            #print("FINAL ----------> ",final)
             if (final == 0):
                 return 0,-1 #checar no futuro se zero eh sufuciente para  o empate
             if (final == 1):
@@ -110,30 +106,20 @@ class ArtificialIntelligence:
             if  (final == 2):
                 return 1000000,-1
         if(depth == 0):
-                #print(" 0 depth----> ",depth)
                 return self.heuristic(board,player1Icon,player2Icon),-1
         if(maximazingPlayer):
-            #print("=========maximazingPlayer======")
             value = -math.inf
             replace = lambda x: x > value
         else:
-            #print("!!!!!!!!!!!NAOmaximazingPlayer!!!!!!")
             value = math.inf
             replace = lambda x: x < value
         bestOption = -1
-        #print("bestOption before child--->",bestOption)
         minMaxChildrens = []
         minMaxChildrens = self.setChildrens(board,player1Icon,player2Icon)
-        #print("minMaxChildrens --->",minMaxChildrens)
         for child in minMaxChildrens:
             move, childBoard = child
-            #print("child=================>", child)
-            #print("====================childBORD ===============")
-            childBoard.showBord(player1Icon,player2Icon)
-            #print('======================fim shor board==============')
+            childBoard.showBord(player1Icon,player2Icon)#comente esse linha para nao ver todos as jogadas simuladas
             nextPlay = self.minMax2(childBoard, depth-1,player1Icon,player2Icon, not maximazingPlayer, alpha, beta)[0]
-            #print("nextPlay=================>",nextPlay)
-            #print("replace(nextPlay) ===========>",replace(nextPlay))
             if replace(nextPlay):
                 value = nextPlay
                 bestOption = move
@@ -143,56 +129,20 @@ class ArtificialIntelligence:
                 beta = min(beta, nextPlay)
             if alpha >= beta:
                 break
-            #print("value final ==========>",value)
-            #print("bestOption =========>",bestOption)
         return value, bestOption
 
-    def minMax(self,gBorde, depth, alph, beta, maximazingPlayer, player1Icon, player2Icon):
-        if(depth == 0):
-            #print("EVALUATE: ",self.evaluateContent(gBorde, player1Icon, player2Icon))
-            return self.evaluateContent(gBorde, player1Icon, player2Icon)
-        #print("MINMAX --->DETPH: ",depth)
-        if(maximazingPlayer):
-            value = -9000
-            for i in range(7):
-                board =  Board(gBorde) 
-                board.addPiece(i,player1Icon)
-                board.showBord(player1Icon,player2Icon)
-                value = max(value, self.minMax(board.gameBord, depth-1, alph, beta, False, player1Icon, player2Icon))
-                alph = max(value, alph)
-                if(alph >= beta):
-                    break
-            return value
-        else:
-            value = 9000
-            for i in range(7):
-                board =  Board(gBorde) 
-                board.addPiece(i,player2Icon)
-                print()
-                board.showBord(player1Icon,player2Icon)
-                print()
-                value = min(value, self.minMax(board.gameBord, depth-1, alph, beta, True, player1Icon, player2Icon))
-                beta = min(value, beta)
-                if(alph >= beta):
-                    break
-            return value
-    
+
     
     def setChildrens(self,board,player1Icon,player2Icon):
         childrens=[]
-        #print("=========set children=============")
         gameBoard = board.gameBoard
         turno=board.getTurn()
-        #print("turno dessa jossa->",turno)
         for col in range(board.width):
-            #print("col--------->",col)
             row = board.height -1
             while((gameBoard[row][col] != 0) and (row>=0)):
                 row -=1
-            #print("row ------------>",row)
             if(row>=0):
                 newChildren = Board(gameBoard,board.evaluationTable,board.deltaEvaluationTable,board.getTurn())
                 newChildren.addPieceSumulation(col,player1Icon,player2Icon)
                 childrens.append((col,newChildren))
-        #print("==========================fim child=============================")
         return childrens
