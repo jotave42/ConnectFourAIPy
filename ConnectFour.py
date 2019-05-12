@@ -28,25 +28,38 @@ def main():
                 print("POSICAO INVALIDA")
         row = piece
         col = playerInput
-        aI.updateEvaluation(row,col,player1.playerAI)
+        #aI.updateEvaluation(row,col,player1.playerAI)
         board.showBord(player1.playerIcon, player2.playerIcon)
         if (board.chekWin(player1.playerIcon)):
             print("PLAYER 1 GANHOU")
             board.showBord(player1.playerIcon, player2.playerIcon)
             break
-        '''for col in range(7):
+
+        '''aiCol = aI.getNextPosition(board.gameBord)
+        piece = board.addPiece(aiCol,player2.playerIcon)
+        row = piece
+        aI.updateEvaluation(row,aiCol, player2.playerAI)
+        board.showBord(player1.playerIcon, player2.playerIcon)
+        if (board.chekWin(player2.playerIcon)):
+            print("PLAYER 2 GANHOU")
+            board.showBord(player1.playerIcon, player2.playerIcon)
+            break'''
+        
+        iaCol = aI.getNextPosition(board,player1.playerIcon,player2.playerIcon)
+        for col in range(7):
             gBoard = Board(board.gameBord)
             gBoard.addPiece(col,player2.playerIcon)
             if (gBoard.chekWin(player2.playerIcon)):
                 socre[col] = 1000000
                 continue
-            socre[col] =  aI.minMax(gBoard.gameBord , 9, -9000, 9000, True, player1.playerIcon, player2.playerIcon)
+            socre[col] =  aI.minMax(gBoard.gameBord , 7, -9000, 9000, True, player1.playerIcon, player2.playerIcon)
         print(socre)
-        board.addPiece(getMin(socre),player2.playerIcon)
+        row = board.addPiece(getMin(socre),player2.playerIcon)
+        #aI.updateEvaluation(row,getMin(socre),player2.playerAI)
         if(board.chekWin(player2.playerIcon)):
             print("PLAYER 2 GANHOU")
             board.showBord(player1.playerIcon, player2.playerIcon)
-            break'''
+            break
     return 0
 
 main()

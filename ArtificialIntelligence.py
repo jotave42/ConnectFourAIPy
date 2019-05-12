@@ -1,74 +1,27 @@
 from Board import *
+from Piece import *
 import math
+
 class ArtificialIntelligence:
-    def __init__(self):
-        self.EVALUATIONTABLE = []
-        self.EVALUATIONTABLE.append([3, 4, 5, 7, 5, 4, 3])
-        self.EVALUATIONTABLE.append([4, 6, 8, 10, 8, 6, 4])
-        self.EVALUATIONTABLE.append([5, 8, 11, 13, 11, 8, 5])
-        self.EVALUATIONTABLE.append([5, 8, 11, 13, 11, 8, 5])
-        self.EVALUATIONTABLE.append([4, 6, 8, 10, 8, 6, 4])
-        self.EVALUATIONTABLE.append([3, 4, 5, 7, 5, 4, 3])
-        self.DELTA_EVALUATIONTABLE = []
-        for i in range(6):
-            col = [0]*7
-            self.DELTA_EVALUATIONTABLE.append(col)
+    children =[]
 
-    def showEvaluation(self):
-        print()
-        print("=========BEGIN==============")
-        print("EVALUATIONTABLE")
-        for i in self.EVALUATIONTABLE:
-            print(i)
-        print("DELTA_EVALUATIONTABLE")
-        for i in self.DELTA_EVALUATIONTABLE:
-            print(i)
-        print("=========END================")
-        print()
-    def chengEvaluationAtPosition(self, row , col, ai):
-                if(ai):
-                    self.DELTA_EVALUATIONTABLE[row][col] += 1
-                    self.EVALUATIONTABLE[row][col] += 1
-                else:
-                    self.DELTA_EVALUATIONTABLE[row][col] -= 1
-                    if(self.DELTA_EVALUATIONTABLE[row][col] == -3):
-                        self.EVALUATIONTABLE[row][col]+=3
-                        self.DELTA_EVALUATIONTABLE[row][col] += 3
-                    else:    
-                        self.EVALUATIONTABLE[row][col]-=1
+    def getNextPosition(self,board,depth,player1Icon,player2Icon):
+        
+        bestOption = self.minMax2(board,depth,player1Icon,player2Icon,True)
+        return bestOption
 
-    def updateEvaluation(self,row , col , ai):
-        self.EVALUATIONTABLE[row][col] = 0
-        self.showEvaluation()
-        for i in range(1,4,1):
-            if(col + i < 7):
-                self.chengEvaluationAtPosition(row, col + i, ai)
-            if(col - i >= 0):
-                self.chengEvaluationAtPosition(row, col - i, ai)
-            if(row + i <  6):
-                self.chengEvaluationAtPosition(row + i, col, ai)
-            if(row - i >= 0):
-                self.chengEvaluationAtPosition(row - i, col, ai)    
-            if((col + i < 7) and (row + i <  6)):
-                self.chengEvaluationAtPosition(row + i, col + i, ai)
-            if((col + i < 7) and (row - i >= 0)):
-                self.chengEvaluationAtPosition(row - i, col + i, ai)
-            if((col - i >= 0) and (row - i >= 0)):
-                self.chengEvaluationAtPosition(row - i, col - i, ai)
-            if((col - i >= 0) and (row + i <  6)):
-                self.chengEvaluationAtPosition(row + i, col - i, ai)
-        self.showEvaluation()
-    def evaluateContent(self, gBorde, player1Icon, player2Icon):
-        utility = 138
-        summ = 0
-        for row  in range(6):
-            for colum in range(7):
-                if(gBorde[row][colum] == player1Icon ):
-                    summ -= self.EVALUATIONTABLE[row][colum]
-                elif(gBorde[row][colum] == player2Icon ):
-                    summ += self.EVALUATIONTABLE[row][colum]
-        return utility + summ
-
+    def minMax2(self, board, depth, player1Icon,player2Icon ,maximazingPlayer): #player2 eh ia
+        final = board.chekFinal(player1Icon,player2Icon)
+        if(final != -1):
+            if (final == 0):
+                return 0 #checar no futuro se zero eh sufuciente para  o empate
+            if (final == 1):
+                return -1000000
+            if  (final == 2):
+                return 1000000
+        elif(depth == 0):
+                return board.evaluateContent(player1Icon,player2Icon)
+        return 0
     def minMax(self,gBorde, depth, alph, beta, maximazingPlayer, player1Icon, player2Icon):
         if(depth == 0):
             print("EVALUATE: ",self.evaluateContent(gBorde, player1Icon, player2Icon))
@@ -89,10 +42,23 @@ class ArtificialIntelligence:
             value = 9000
             for i in range(7):
                 board =  Board(gBorde) 
-                board.addPiece(i,player1Icon)
-                board.showBord(player1Icon,player1Icon)
+                board.addPiece(i,player2Icon)
+                board.showBord(player1Icon,player2Icon)
                 value = min(value, self.minMax(board.gameBord, depth-1, alph, beta, True, player1Icon, player2Icon))
-                alph = min(value, alph)
+                beta = min(value, beta)
                 if(alph >= beta):
                     break
             return value
+    
+    
+    def setChildrens(self,gameBord,playerIcon):
+        self.children=[]
+        for col in range(len(gameBord[0])):
+            row = len(gameBord) -1
+            while((gameBord[row][col] != 0) and (row>=0)):
+                row -=1
+            if(row<6):
+                newChildren = Board(gameBord)
+                newChildren.addPiece(col,playerIcon)
+                self.children.append(newChildren)
+        return self.children
