@@ -90,7 +90,7 @@ def MCTS(currentState, itermax, player1Icon, player2Icon, currentNode=None, time
     print("AI\'s computed winning percentages")
     for node in sortedChildNodes:
         print('Move: %s    Win Rate: %.2f%%' % (node.move + 1, 100 * node.wins / node.visits))
-    print('Simulations performed: %s\n' % i)git 
+    print('Simulations performed: %s\n' % i)
     return rootnode, sortedChildNodes[0].move
 
 
