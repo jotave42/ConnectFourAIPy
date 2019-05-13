@@ -1,15 +1,8 @@
 
 import numpy as np
-import sys
-import copy
 import time
 import random
 from Board import *
-
-
-# the following code was adapted and modified from: http://mcts.ai/code/python.html
-##################################################
-
 
 class Node:
     def __init__(self, move=None, parent=None, state=None, board=None):
@@ -25,13 +18,12 @@ class Node:
         self.player = Board.getTurn(self.boardcp)
 
     def selection(self):
-        # return child with largest UCT value
+
         foo = lambda x: x.wins / x.visits + np.sqrt(2 * np.log(self.visits) / x.visits)
         return sorted(self.childNodes, key=foo)[-1]
 
     def expand(self, move, state,board):
-        # return child when move is taken
-        # remove move from current node
+
         boardcp = Board(board.gameBord, board.getTurn())
         child = Node(move=move, parent=self, state=state, board=boardcp)
         self.untriedMoves.remove(move)
@@ -53,8 +45,6 @@ def MCTS(currentState, itermax, player1Icon, player2Icon, currentNode=None, time
         node = rootnode
         boardcp=Board(board.gameBord, board.getTurn())
 
-        # selection
-        # keep going down the tree based on best UCT values until terminal or unexpanded node
         while node.untriedMoves == [] and node.childNodes != []:
             node = node.selection()
             print("turno antes inserir  1 ---->",boardcp.getTurn())
@@ -62,7 +52,7 @@ def MCTS(currentState, itermax, player1Icon, player2Icon, currentNode=None, time
             boardcp.showBord(player1Icon,player2Icon)
             print("turno depois inserir 1 ---->",boardcp.getTurn())
             
-        # expand
+
         if node.untriedMoves != []:
             m = random.choice(node.untriedMoves)
             state = None
@@ -72,13 +62,12 @@ def MCTS(currentState, itermax, player1Icon, player2Icon, currentNode=None, time
             print("turno depois inserir 2 ---->",boardcp.getTurn())
             node = node.expand(m, state,boardcp)
 
-        # rollout
         while boardcp.getMoves(boardcp):
             print("turno antes inserir  3 ---->",boardcp.getTurn())
             boardcp.addPieceSumulation(random.choice(boardcp.getMoves(boardcp)), player1Icon, player2Icon)
             boardcp.showBord(player1Icon,player2Icon)
             print("turno depois inserir 3 ---->",boardcp.getTurn())
-        # backpropagate
+
         while node is not None:
 
             node.update(boardcp.chekFinal(player1Icon, player2Icon))
@@ -97,5 +86,3 @@ def MCTS(currentState, itermax, player1Icon, player2Icon, currentNode=None, time
     print("enviando ---------->",sortedChildNodes[0].move)
     return rootnode, sortedChildNodes[0].move
 
-
-######################################################
