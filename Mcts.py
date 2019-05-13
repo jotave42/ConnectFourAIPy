@@ -1,6 +1,3 @@
-'''
-Written by: Christopher Yong
-'''
 
 import numpy as np
 import sys
@@ -71,6 +68,7 @@ def MCTS(currentState, itermax, player1Icon, player2Icon, currentNode=None, time
             state = None
             print("turno antes inserir  2 ---->",boardcp.getTurn())
             boardcp.addPieceSumulation(m, player1Icon, player2Icon)
+            boardcp.showBord(player1Icon,player2Icon)
             print("turno depois inserir 2 ---->",boardcp.getTurn())
             node = node.expand(m, state,boardcp)
 
@@ -78,6 +76,7 @@ def MCTS(currentState, itermax, player1Icon, player2Icon, currentNode=None, time
         while boardcp.getMoves(boardcp):
             print("turno antes inserir  3 ---->",boardcp.getTurn())
             boardcp.addPieceSumulation(random.choice(boardcp.getMoves(boardcp)), player1Icon, player2Icon)
+            boardcp.showBord(player1Icon,player2Icon)
             print("turno depois inserir 3 ---->",boardcp.getTurn())
         # backpropagate
         while node is not None:
