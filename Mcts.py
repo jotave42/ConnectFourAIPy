@@ -1,4 +1,3 @@
-
 import numpy as np
 import time
 import random
@@ -6,7 +5,6 @@ from Board import *
 
 class Node:
     def __init__(self, move=None, parent=None, state=None, board=None):
-
         self.boardcp = Board(board.gameBoard, board.getTurn())
         self.state = self.boardcp
         self.parent = parent
@@ -51,7 +49,6 @@ class Node:
 def MCTS(currentState, itermax, player1Icon, player2Icon, currentNode=None, timeout=100, board=None):
     rootnode = Node(state=currentState, board =Board(currentState.gameBoard, currentState.turn))
     if currentNode is not None: rootnode = currentNode
-    currentState.showBord(player1Icon,player2Icon)
     start = time.clock()
     for i in range(itermax):
         node = rootnode
@@ -59,26 +56,15 @@ def MCTS(currentState, itermax, player1Icon, player2Icon, currentNode=None, time
 
         while node.untriedMoves == [] and node.childNodes != []:
             node = node.selection()
-            print("turno antes inserir  1 ---->",boardcp.getTurn())
             boardcp.addPieceSumulation(node.move, player1Icon, player2Icon)
-            boardcp.showBord(player1Icon,player2Icon)
-            print("turno depois inserir 1 ---->",boardcp.getTurn())
-            
-
         if node.untriedMoves != []:
             m = random.choice(node.untriedMoves)
             state = None
-            print("turno antes inserir  2 ---->",boardcp.getTurn())
             boardcp.addPieceSumulation(m, player1Icon, player2Icon)
-            boardcp.showBord(player1Icon,player2Icon)
-            print("turno depois inserir 2 ---->",boardcp.getTurn())
             node = node.expand(m, state,boardcp)
 
         while boardcp.getMoves(boardcp):
-            print("turno antes inserir  3 ---->",boardcp.getTurn())
             boardcp.addPieceSumulation(random.choice(boardcp.getMoves(boardcp)), player1Icon, player2Icon)
-            boardcp.showBord(player1Icon,player2Icon)
-            print("turno depois inserir 3 ---->",boardcp.getTurn())
             if(boardcp.chekFinal(player1Icon,player2Icon)>-1):
                 break
 
@@ -93,12 +79,9 @@ def MCTS(currentState, itermax, player1Icon, player2Icon, currentNode=None, time
     foo2 = lambda x: x.loss / x.visits
     foo3 = lambda x : (foo(x),foo2(x))
     sortedChildNodes = sorted(rootnode.childNodes, key=foo3)[::-1]
-    print("AI\'s computed winning percentages")
-    for node in sortedChildNodes:
-        print('Move: %s   Win Rate: %.2f%%' % (node.move , 100 * node.wins / node.visits))
-        print('Move: %s   Loss Rate: %.2f%%' % (node.move , 100 * node.loss / node.visits))
-    print('Simulations performed: %s\n' % i)
-    print("enviando ---------->",sortedChildNodes[0])
-    print("enviando ---------->",sortedChildNodes[0].move)
+#    print("AI\'s computed winning percentages")
+#    for node in sortedChildNodes:
+#        print('Move: %s   Win Rate: %.2f%%' % (node.move , 100 * node.wins / node.visits))
+#        print('Move: %s   Loss Rate: %.2f%%' % (node.move , 100 * node.loss / node.visits))
     return rootnode, sortedChildNodes[0].move
 
