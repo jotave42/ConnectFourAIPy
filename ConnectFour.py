@@ -35,7 +35,7 @@ def main():
             board.showBord(player1.playerIcon, player2.playerIcon)
             break
         board.showBord(player1.playerIcon, player2.playerIcon)
-        aiCol = aI.getNextPosition(board,7,player1.playerIcon,player2.playerIcon)
+        aiCol = aI.getNextPosition(board,5,player1.playerIcon,player2.playerIcon)
         piece = board.addPiece(aiCol,player2.playerIcon)
         row = piece
         if (board.chekWin(player2.playerIcon)):

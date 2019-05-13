@@ -1,11 +1,10 @@
-from termcolor import colored, cprint
 class Board():
-    gameBord=[]
+    gameBoard=[]
     __lastRow = 6
     width = 7
     height = 6
     turn= 1
-    def __init__(self, gameBordToCopy = None,turnCopy=None):
+    def __init__(self, gameBordToCopy = None,turnCopy = None):
         self.gameBoard=[]
         if(turnCopy!=None):
             self.turn = turnCopy
@@ -63,11 +62,11 @@ class Board():
             line = "[ "
             for col in row:
                 if(col == player1Icon):
-                    line += colored(col, 'red')+" "
+                    line += '\033[31m'+col+'\033[0m'+" "
                 elif (col == player2Icon):
-                    line += colored(col, 'green')+" "
+                    line +=  '\033[32m'+col+'\033[0m'+" "
                 else:
-                    line += colored(col, 'white')+" "
+                    line += str(col)+" "
             line += "]"
             print(line)
         print("=================\n")
