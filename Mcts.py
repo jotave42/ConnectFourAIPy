@@ -40,7 +40,7 @@ class Node:
             self.wins += 0.5
         elif(result == 1):
             self.loss += 1
-            if(self.wins>0):
+        else:
                 self.wins -= 1
         self.visits += 1
 
