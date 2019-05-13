@@ -137,3 +137,24 @@ class Board():
 
     def setTurn(self,vl):
         self.turn = vl
+
+    def copy(self):
+        newGameBoard = []
+        for row in self.height:
+            cols = []
+            for col in self.width:
+                cols.append(self.gameBoard)
+            newGameBoard.append(cols)
+        return newGameBoard
+
+    def getMoves(self, board):
+        childrens = []
+        gameBoard = board.gameBoard
+        turno = board.getTurn()
+        for col in range(board.width):
+            row = board.height - 1
+            while ((gameBoard[row][col] != 0) and (row >= 0)):
+                row -= 1
+            if (row >= 0):
+                childrens.append(col)
+        return childrens

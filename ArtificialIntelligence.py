@@ -1,5 +1,4 @@
 from Board import *
-from Piece import *
 import math
 
 class ArtificialIntelligence:
@@ -118,7 +117,7 @@ class ArtificialIntelligence:
         minMaxChildrens = self.setChildrens(board,player1Icon,player2Icon)
         for child in minMaxChildrens:
             move, childBoard = child
-            childBoard.showBord(player1Icon,player2Icon)#comente esse linha para nao ver todos as jogadas simuladas
+            #childBoard.showBord(player1Icon,player2Icon)#comente esse linha para nao ver todos as jogadas simuladas
             nextPlay = self.minMax2(childBoard, depth-1,player1Icon,player2Icon, not maximazingPlayer, alpha, beta)[0]
             if replace(nextPlay):
                 value = nextPlay
