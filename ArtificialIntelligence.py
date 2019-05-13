@@ -26,10 +26,7 @@ class ArtificialIntelligence:
                         heur -= 10000
                 except IndexError:
                     pass
-
-                # check vertical streaks
                 try:
-                    # add player one vertical streaks to heur
                     if state[i][j] == state[i][j + 1] == aiPlayerIcon:
                         heur += 10
                     if state[i][j] == state[i][j + 1] == state[i][j + 2] == aiPlayerIcon:
@@ -37,7 +34,6 @@ class ArtificialIntelligence:
                     if state[i][j] == state[i][j+1] == state[i][j+2] == state[i][j+3] == aiPlayerIcon:
                         heur += 10000
 
-                    # subtract player two streaks from heur
                     if state[i][j] == state[i][j + 1] == Player2Icon:
                         heur -= 10
                     if state[i][j] == state[i][j + 1] == state[i][j + 2] == Player2Icon:
@@ -47,9 +43,7 @@ class ArtificialIntelligence:
                 except IndexError:
                     pass
 
-                # check positive diagonal streaks
                 try:
-                    # add player one streaks to heur
                     if not j + 3 > board.height and state[i][j] == state[i + 1][j + 1] == aiPlayerIcon:
                         heur += 100
                     if not j + 3 > board.height and state[i][j] == state[i + 1][j + 1] == state[i + 2][j + 2] == aiPlayerIcon:
@@ -58,7 +52,6 @@ class ArtificialIntelligence:
                             == state[i+3][j + 3] == aiPlayerIcon:
                         heur += 10000
 
-                    # add player two streaks to heur
                     if not j + 3 > board.height and state[i][j] == state[i + 1][j + 1] == Player2Icon:
                         heur -= 100
                     if not j + 3 > board.height and state[i][j] == state[i + 1][j + 1] == state[i + 2][j + 2] == Player2Icon:
@@ -68,10 +61,7 @@ class ArtificialIntelligence:
                         heur -= 10000
                 except IndexError:
                     pass
-
-                # check negative diagonal streaks
                 try:
-                    # add  player one streaks
                     if not j - 3 < 0 and state[i][j] == state[i+1][j - 1] == aiPlayerIcon:
                         heur += 10
                     if not j - 3 < 0 and state[i][j] == state[i+1][j - 1] == state[i+2][j - 2] == aiPlayerIcon:
@@ -79,8 +69,7 @@ class ArtificialIntelligence:
                     if not j - 3 < 0 and state[i][j] == state[i+1][j - 1] == state[i+2][j - 2] \
                             == state[i+3][j - 3] == aiPlayerIcon:
                         heur += 10000
-
-                    # subtract player two streaks
+                        
                     if not j - 3 < 0 and state[i][j] == state[i+1][j - 1] == Player2Icon:
                         heur -= 10
                     if not j - 3 < 0 and state[i][j] == state[i+1][j - 1] == state[i+2][j - 2] == Player2Icon:

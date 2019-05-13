@@ -14,13 +14,16 @@ class Node:
         self.untriedMoves = board.getMoves(self.boardcp)
         self.childNodes = []
         self.wins = 0
+        self.loss = 0
         self.visits = 0
         self.player = Board.getTurn(self.boardcp)
 
     def selection(self):
 
         foo = lambda x: x.wins / x.visits + np.sqrt(2 * np.log(self.visits) / x.visits)
-        return sorted(self.childNodes, key=foo)[-1]
+        foo2 = lambda x: x.loss / x.visits + np.sqrt(2 * np.log(self.visits) / x.visits)
+        foo3 = lambda x : (foo(x),foo2(x))
+        return sorted(self.childNodes, key=foo3)[-1]
 
     def expand(self, move, state,board):
 
@@ -35,6 +38,10 @@ class Node:
             self.wins += 1
         elif(result ==0 ):
             self.wins += 0.5
+        elif(result == 1):
+            self.loss += 1
+            if(self.wins>0):
+                self.wins -= 1
         self.visits += 1
 
 def MCTS(currentState, itermax, player1Icon, player2Icon, currentNode=None, timeout=100, board=None):
@@ -78,11 +85,14 @@ def MCTS(currentState, itermax, player1Icon, player2Icon, currentNode=None, time
         duration = time.clock() - start
         if duration > timeout: break
 
-    foo = lambda x: x.wins / x.visits
-    sortedChildNodes = sorted(rootnode.childNodes, key=foo)[::-1]
+    foo =  lambda x: x.wins / x.visits
+    foo2 = lambda x: x.loss / x.visits
+    foo3 = lambda x : (foo(x),foo2(x))
+    sortedChildNodes = sorted(rootnode.childNodes, key=foo3)[::-1]
     print("AI\'s computed winning percentages")
     for node in sortedChildNodes:
-        print('Move: %s    Win Rate: %.2f%%' % (node.move , 100 * node.wins / node.visits))
+        print('Move: %s   Win Rate: %.2f%%' % (node.move , 100 * node.wins / node.visits))
+        print('Move: %s   Loss Rate: %.2f%%' % (node.move , 100 * node.loss / node.visits))
     print('Simulations performed: %s\n' % i)
     print("enviando ---------->",sortedChildNodes[0])
     print("enviando ---------->",sortedChildNodes[0].move)
