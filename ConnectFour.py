@@ -44,7 +44,7 @@ def main():
             aiCol = aI.getNextPosition(board,5,player1.playerIcon,player2.playerIcon)
         else:
             node = Node(state=board, board = board)
-            node, aiCol = MCTS(board, 1000000, player1.playerIcon, player2.playerIcon, currentNode=node, timeout=10, board = board)
+            node, aiCol = MCTS(board, 5000000, player1.playerIcon, player2.playerIcon, currentNode=node, timeout=10, board = board)
         piece = board.addPiece(aiCol,player2.playerIcon)
         if (board.chekWin(player2.playerIcon)):
             print("PLAYER 2 GANHOU")
