@@ -1,5 +1,4 @@
 from Board import *
-from Piece import *
 import math
 
 class ArtificialIntelligence:
