@@ -94,7 +94,7 @@ class ArtificialIntelligence:
             if  (final == 2):
                 return 1000000,-1
         if(depth == 0):
-                return self.heuristic(board,player1Icon,player2Icon),-1
+                return self.heuristic(board,player2Icon,player1Icon),-1
         if(maximazingPlayer):
             value = -math.inf
             replace = lambda x: x > value

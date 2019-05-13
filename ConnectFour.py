@@ -27,20 +27,20 @@ def main():
     while(True):
         piece = -1
         if(choiceAi == 3):
-            print("=====================VEZ MCTS====================")
-            node = Node(state=board, board = board)
-            node, aiCol = MCTS(board, 1000000,  player2.playerIcon,player1.playerIcon, currentNode=node, timeout=10, board = board)
-            piece = board.addPiece(aiCol,player1.playerIcon)
-            if (board.chekWin(player1.playerIcon)):
-                print("PLAYER 1 GANHOU")
-                board.showBord(player1.playerIcon, player2.playerIcon)
-                break
-            board.showBord(player1.playerIcon, player2.playerIcon)    
             print("======================MINMAX====================")
             aiCol = aI.getNextPosition(board,5,player1.playerIcon,player2.playerIcon)
             piece = board.addPiece(aiCol,player2.playerIcon)
             if (board.chekWin(player2.playerIcon)):
-                print("PLAYER 2 GANHOU")
+                print("PLAYER MINMAX GANHOU")
+                board.showBord(player1.playerIcon, player2.playerIcon)
+                break
+            board.showBord(player1.playerIcon, player2.playerIcon)    
+            print("=====================MCTS=======================")
+            node = Node(state=board, board = board)
+            node, aiCol = MCTS(board, 1000000,  player2.playerIcon,player1.playerIcon, currentNode=node, timeout=10, board = board)
+            piece = board.addPiece(aiCol,player1.playerIcon)
+            if (board.chekWin(player1.playerIcon)):
+                print("PLAYER MCTS GANHOU")
                 board.showBord(player1.playerIcon, player2.playerIcon)
                 break
             board.showBord(player1.playerIcon, player2.playerIcon)    
