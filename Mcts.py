@@ -17,15 +17,15 @@ from Board import *
 class Node:
     def __init__(self, move=None, parent=None, state=None, board=None):
 
-        self.state = state
-        boardcp = Board(board.gameBord, board.getTurn())
+        self.boardcp = Board(board.gameBord, board.getTurn())
+        self.state = self.boardcp
         self.parent = parent
         self.move = move
-        self.untriedMoves = board.getMoves(boardcp)
+        self.untriedMoves = board.getMoves(self.boardcp)
         self.childNodes = []
         self.wins = 0
         self.visits = 0
-        self.player = Board.getTurn(boardcp)
+        self.player = Board.getTurn(self.boardcp)
 
     def selection(self):
         # return child with largest UCT value
@@ -49,33 +49,36 @@ class Node:
         self.visits += 1
 
 def MCTS(currentState, itermax, player1Icon, player2Icon, currentNode=None, timeout=100, board=None):
-    rootnode = Node(state=currentState, board =Board())
+    rootnode = Node(state=currentState, board =Board(currentState.gameBord, currentState.turn))
     if currentNode is not None: rootnode = currentNode
-
     start = time.clock()
     for i in range(itermax):
         node = rootnode
-
         boardcp=Board(board.gameBord, board.getTurn())
 
         # selection
         # keep going down the tree based on best UCT values until terminal or unexpanded node
         while node.untriedMoves == [] and node.childNodes != []:
             node = node.selection()
+            print("turno antes inserir  1 ---->",boardcp.getTurn())
             boardcp.addPieceSumulation(node.move, player1Icon, player2Icon)
-
+            boardcp.showBord(player1Icon,player2Icon)
+            print("turno depois inserir 1 ---->",boardcp.getTurn())
+            
         # expand
         if node.untriedMoves != []:
             m = random.choice(node.untriedMoves)
             state = None
-
-            boardcp.addPieceSumulation(m, player1Icon, player2Icon,)
+            print("turno antes inserir  2 ---->",boardcp.getTurn())
+            boardcp.addPieceSumulation(m, player1Icon, player2Icon)
+            print("turno depois inserir 2 ---->",boardcp.getTurn())
             node = node.expand(m, state,boardcp)
 
         # rollout
         while boardcp.getMoves(boardcp):
+            print("turno antes inserir  3 ---->",boardcp.getTurn())
             boardcp.addPieceSumulation(random.choice(boardcp.getMoves(boardcp)), player1Icon, player2Icon)
-
+            print("turno depois inserir 3 ---->",boardcp.getTurn())
         # backpropagate
         while node is not None:
 
@@ -89,8 +92,10 @@ def MCTS(currentState, itermax, player1Icon, player2Icon, currentNode=None, time
     sortedChildNodes = sorted(rootnode.childNodes, key=foo)[::-1]
     print("AI\'s computed winning percentages")
     for node in sortedChildNodes:
-        print('Move: %s    Win Rate: %.2f%%' % (node.move + 1, 100 * node.wins / node.visits))
+        print('Move: %s    Win Rate: %.2f%%' % (node.move , 100 * node.wins / node.visits))
     print('Simulations performed: %s\n' % i)
+    print("enviando ---------->",sortedChildNodes[0])
+    print("enviando ---------->",sortedChildNodes[0].move)
     return rootnode, sortedChildNodes[0].move
 
 

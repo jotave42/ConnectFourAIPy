@@ -13,7 +13,6 @@ def getMin(numbers):
 
 def main():
     board = Board()
-    node = Node(state=board, board = board)
     aI = ArtificialIntelligence()
     gameing = True
     player1 = Player("1",False)
@@ -38,8 +37,8 @@ def main():
             break
         board.showBord(player1.playerIcon, player2.playerIcon)
         #aiCol = aI.getNextPosition(board,7,player1.playerIcon,player2.playerIcon)
-
-        node, col = MCTS(board, 20000, player1.playerIcon, player2.playerIcon, currentNode=node, timeout=2, board = board)
+        node = Node(state=board, board = board)
+        node, col = MCTS(board, 100000, player1.playerIcon, player2.playerIcon, currentNode=node, timeout=2, board = board)
         print(col , "coluuuuuuunnnnnaaaa")
         piece = board.addPiece(col,player2.playerIcon)
         row = piece
