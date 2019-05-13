@@ -36,11 +36,15 @@ class Node:
     def update(self, result):
         if(result == 2):
             self.wins += 1
+            if(self.loss>1):
+                self.loss-=1
         elif(result ==0 ):
             self.wins += 0.5
+            if(self.loss>0.5):
+                self.loss-=0.5
         elif(result == 1):
             self.loss += 1
-            if(self.wins>0):
+            if(self.wins>1):
                 self.wins -= 1
         self.visits += 1
 
