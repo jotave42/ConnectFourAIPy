@@ -1,8 +1,7 @@
 from ArtificialIntelligence import *
-from Mcts import *
 from Board import *
 from Player import *
-
+from Mcts import *
 def getMin(numbers):
     minValue = numbers[0]
     pos = 0
@@ -14,12 +13,11 @@ def getMin(numbers):
 
 def main():
     board = Board()
+    node = Node(state=board, board = board)
     aI = ArtificialIntelligence()
-    mc = Mcts(2)
     gameing = True
     player1 = Player("1",False)
     player2 = Player("2",True)
-
     while(True):
         piece = -1
         socre =[0]*7
@@ -27,32 +25,30 @@ def main():
             print("Estado Atual do Tabuleiro: ")
             board.showBord(player1.playerIcon, player2.playerIcon)
             playerInput = int (input("Digite a coluna: "))
+            print("turn befor add-->",board.getTurn())
             piece = board.addPiece(playerInput,player1.playerIcon)
-            mc.update(playerInput)
-            board.setTurn(2)
-
+            print("turn AFTER add-->",board.getTurn())
             if(piece < 0):
                 print("POSICAO INVALIDA")
-        board.showBord(player1.playerIcon, player2.playerIcon)
+        row = piece
+        col = playerInput
         if (board.chekWin(player1.playerIcon)):
             print("PLAYER 1 GANHOU")
             board.showBord(player1.playerIcon, player2.playerIcon)
-            board.setTurn(3)
             break
-        for col in range(7):
-            gBoard = Board(board.gameBord)
-            gBoard.addPiece(col,player2.playerIcon)
-            if (gBoard.chekWin(player2.playerIcon)):
-                socre[col] = 1000000
-                continue
-            socre[col] =  mc.getOptimalMove()# aI.minMax(gBoard.gameBord , 9, -9000, 9000, True, player1.playerIcon, player2.playerIcon)
-        board.addPiece(getMin(socre),player2.playerIcon)
-        board.setTurn(1)
-        if(board.chekWin(player2.playerIcon)):
+        board.showBord(player1.playerIcon, player2.playerIcon)
+        #aiCol = aI.getNextPosition(board,7,player1.playerIcon,player2.playerIcon)
+
+        node, col = MCTS(board, 20000, player1.playerIcon, player2.playerIcon, currentNode=node, timeout=2, board = board)
+        piece = board.addPiece(col,player2.playerIcon)
+        row = piece
+        if (board.chekWin(player2.playerIcon)):
             print("PLAYER 2 GANHOU")
             board.showBord(player1.playerIcon, player2.playerIcon)
-            board.setTurn(4)
             break
+        board.showBord(player1.playerIcon, player2.playerIcon)
+        
     return 0
 
 main()
+

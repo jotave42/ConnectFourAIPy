@@ -1,120 +1,96 @@
-from Board import *
+'''
+Written by: Christopher Yong
+'''
+
+import numpy as np
+import sys
+import copy
 import time
-import math
 import random
-
-class Mcts():
-    def __init__(self, time):
-        board = Board()
-        self.width = Board.width
-        self.time = time
-        self.root = MctsNode(None,board);
-
-    def update(self,move):
-        if(self.root.children[move] != None):
-            self.root = self.root.children[move]
-        else:
-            self.root = MctsNode(None,self.root.board.addable(move))
-
-    def getOptimalMove(self):
-        stop = time.time() + self.time
-        par = time.time()
-        while(stop > par):
-
-            selectNode = Mcts.select(self,self.root)
-            if(selectNode == None):
-                expandedNode = Mcts.simulate(self.selectNode)
-                result = Mcts.simulate(self.expandedNode)
-                Mcts.backPropagate(expandedNode,result)
-            par = time.time()
-        maxIndex = -1
-
-        for i in range (0,Board.width,1):
-            if(self.root.children[i] != None):
-
-                if maxIndex == -1 or self.root.children[i].visits > self.root.children[maxIndex].visits:
-                    maxIndex = i
-
-        return maxIndex
-
-    def select(self):
-        return self.select(self.root)
-
-    def select(self, parent):
-
-        print(parent.children[0],  "ha")
-        for i in range(0,Board.width,1):
-            if(parent.children[i] == None and parent.board.addable(i)):
-                return parent
-
-        maxSelectionVal = -1
-        maxIndex = -1
-        for i in range(0, Board.width, 1):
-            if(not parent.board.addable(i)):
-                continue
-            self.currentChild = parent.children[i]
-            if(parent.board.turn == 1):
-                wins = self.currentChild.playerWins
-            else:
-                wins = self.currentChild.visits-self.currentChild.playerWins
-            selectionVal = (wins/self.selectionVal.visits) + math.sqrt(2)*math.sqrt(math.log(parent.visits/self.currentChild.visits))
-            maxSelectionVal = selectionVal
-            maxIndex = i
-        if (maxIndex == 1):
-            return None
-        return self.select(parent.children[maxIndex])
-
-    def expand(self, selectedNode):
-        unvisitedChildrenIndices = []
-        for i in range(0,Board.width,1):
-            if(self.selectNode.children[i] == None and self.selectNode.board.addable(i)):
-                unvisitedChildrenIndices.append(i)
-
-        selectedIndex = int(len(unvisitedChildrenIndices)*random.uniform(0,1))
-        self.selectNode.children[selectedIndex] = MctsNode(selectedNode,selectedNode.board.addPiece(selectedIndex,2))
-        return self.selectNode.children[selectedIndex]
+from Board import *
 
 
-    def simulate(self, expandedNode):
-        simulationBoard = expandedNode.board
-        while(simulationBoard.getTurn() < 3):
-            simulationBoard.addPiece(int(random.uniform(0,1)*self.board.width))
-
-        if (self.board.turn == 3):
-            return 1
-        elif (self.board.turn == 4):
-            return 0
-        else:
-            return 0.5
+# the following code was adapted and modified from: http://mcts.ai/code/python.html
+##################################################
 
 
+class Node:
+    def __init__(self, move=None, parent=None, state=None, board=None):
 
-
-    def backpropagate(self, expandedNode, simulationResult):
-        currentNode = expandedNode
-        while(currentNode != None):
-            currentNode.incrementVisits()
-            currentNode.incrementPLayerWins(simulationResult)
-            currentNode =currentNode.parent
-
-
-
-class MctsNode():
-
-    def __init__(self,parent,board):
+        self.state = state
+        boardcp = Board(board.gameBord, board.getTurn())
         self.parent = parent
-        self.board = board
+        self.move = move
+        self.untriedMoves = board.getMoves(boardcp)
+        self.childNodes = []
+        self.wins = 0
         self.visits = 0
-        self.playerWins = 0
-        self.children = []
+        self.player = Board.getTurn(boardcp)
 
-    def incrementVisit(self):
+    def selection(self):
+        # return child with largest UCT value
+        foo = lambda x: x.wins / x.visits + np.sqrt(2 * np.log(self.visits) / x.visits)
+        return sorted(self.childNodes, key=foo)[-1]
+
+    def expand(self, move, state,board):
+        # return child when move is taken
+        # remove move from current node
+        child = Node(move=move, parent=self, state=state, board=board)
+        self.untriedMoves.remove(move)
+        self.childNodes.append(child)
+        return child
+
+    def update(self, result):
+        if(result == 2):
+            self.wins += 1
+        elif(result ==0 ):
+            self.wins += 0.5
         self.visits += 1
-        return self.visits
 
-    def incrementPLayerWins(self, result):
-         self.playerWins += 1
-         return self.playerWins
+def MCTS(currentState, itermax, player1Icon, player2Icon, currentNode=None, timeout=100, board=None):
+    rootnode = Node(state=currentState, board =Board())
+    if currentNode is not None: rootnode = currentNode
+
+    start = time.clock()
+    for i in range(itermax):
+        node = rootnode
+
+        boardcp=Board(board.gameBord, board.getTurn())
+
+        # selection
+        # keep going down the tree based on best UCT values until terminal or unexpanded node
+        while node.untriedMoves == [] and node.childNodes != []:
+            node = node.selection()
+            boardcp.addPieceSumulation(node.move, player1Icon, player2Icon)
+
+        # expand
+        if node.untriedMoves != []:
+            m = random.choice(node.untriedMoves)
+            state = None
+
+            boardcp.addPieceSumulation(m, player1Icon, player2Icon,)
+            node = node.expand(m, state,boardcp)
+
+        # rollout
+        while boardcp.getMoves(boardcp):
+            boardcp.addPieceSumulation(random.choice(boardcp.getMoves(boardcp)), player1Icon, player2Icon)
+
+        # backpropagate
+        while node is not None:
+
+            node.update(boardcp.chekFinal(player1Icon, player2Icon))
+            node = node.parent
+
+        duration = time.clock() - start
+        if duration > timeout: break
+
+    foo = lambda x: x.wins / x.visits
+    sortedChildNodes = sorted(rootnode.childNodes, key=foo)[::-1]
+    print("AI\'s computed winning percentages")
+    for node in sortedChildNodes:
+        print('Move: %s    Win Rate: %.2f%%' % (node.move + 1, 100 * node.wins / node.visits))
+    print('Simulations performed: %s\n' % i)
+    return rootnode, sortedChildNodes[0].move
 
 
-
+######################################################

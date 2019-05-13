@@ -5,46 +5,61 @@ class Board():
     width = 7
     height = 6
     turn= 1
-
-
-    def __init__(self, gameBordToCopy = None):
-        self.gameBord=[]
-        self.turn = self.getTurn()
+    def __init__(self, gameBordToCopy = None,turnCopy=None):
+        self.gameBoard=[]
+        if(turnCopy!=None):
+            self.turn = turnCopy
         if(gameBordToCopy):
-            for row in range(self.height):
+            for row in range(6):
                 cols=[]
-                for col in range(self.width):
+                for col in range(7):
                     cols.append(gameBordToCopy[row][col])
-                self.gameBord.append(cols)
+                self.gameBoard.append(cols)
         else:
-            for row in range(self.height):
+            for row in range(6):
                 cols =[]
-                for col  in range(self.width):
+                for col  in range(7):
                     cols.append(0)
-                self.gameBord.append(cols)
-    
+                self.gameBoard.append(cols)
+
     def addable(self,col):
         i = 0
-        while(i < self.height and self.gameBord[i][col] == 0  ):
+        while(i < 6 and self.gameBoard[i][col] == 0  ):
             i+=1
-        self.__lastRow = i
+        self.__lastRow = i -1
         if(i != 0 ):
             return True
         return False
 
-    def addPiece(self, col , playerIcon):
+    def addPieceSumulation(self, col , player1Icon,player2Icon):
         if(self.addable(col)):
-            self.gameBord[self.__lastRow-1][col] = playerIcon
+            if(self.getTurn()==1):
+                self.gameBoard[self.__lastRow][col] = player1Icon
+                self.setTurn(0)
+            else:
+                self.gameBoard[self.__lastRow][col] = player2Icon
+                self.setTurn(1)
             return self.__lastRow
         else:
             return -1
     
+    def addPiece(self, col , playerIcon):
+        if(self.addable(col)):
+            self.gameBoard[self.__lastRow][col] = playerIcon
+            if(self.getTurn()==1):
+                self.setTurn(0)
+            else:
+                self.setTurn(1)
+            return self.__lastRow
+        else:
+            return -1
     def showBord(self):
-        for row  in self.gameBord:
+        for row  in self.gameBoard:
             print(row)
 
     def showBord(self,player1Icon,player2Icon):
-        for row  in self.gameBord:
+        print("\n=================")
+        for row  in self.gameBoard:
             line = "[ "
             for col in row:
                 if(col == player1Icon):
@@ -55,23 +70,23 @@ class Board():
                     line += colored(col, 'white')+" "
             line += "]"
             print(line)
-
+        print("=================\n")
     def checkVerticalStreaks(self, playerIcon):
-        for colum in range(self.width):
+        for colum in range(7):
             currentStreak = 0
-            for row in range(self.height):
-                if (self.gameBord[row][colum] == playerIcon):
+            for row in range(6):
+                if (self.gameBoard[row][colum] == playerIcon):
                     currentStreak += 1
                     if (currentStreak == 4):
                         return True
                 else:
-                    currentStreak =0
+                    currentStreak = 0
         return False
 
     def checkHorizontalStreaks(self, playerIcon):
-        for row in self.gameBord:
+        for row in self.gameBoard:
             currentStreak = 0
-            for colum in range(self.width):
+            for colum in range(7):
                 if (row[colum] == playerIcon):
                     currentStreak +=1
                     if (currentStreak == 4):
@@ -83,26 +98,64 @@ class Board():
     def checkMDiagonalStreaks(self, playerIcon):
         for row in range(3):
             for colum in range(3,7,1):
-                if self.gameBord[row][colum] == playerIcon and self.gameBord[row+1][colum-1] == playerIcon and self.gameBord[row+2][colum-2] == playerIcon and self.gameBord[row+3][colum-3] == playerIcon: 
+                if self.gameBoard[row][colum] == playerIcon and self.gameBoard[row+1][colum-1] == playerIcon and self.gameBoard[row+2][colum-2] == playerIcon and self.gameBoard[row+3][colum-3] == playerIcon: 
                     return True
         return False
 
     def checkSDiagonalStreaks(self, playerIcon):
         for row in range(3):
             for colum in range(4):
-                if self.gameBord[row][colum] == playerIcon and self.gameBord[row+1][colum+1] == playerIcon and self.gameBord[row+2][colum+2] == playerIcon and self.gameBord[row+3][colum+3] == playerIcon: 
+                if self.gameBoard[row][colum] == playerIcon and self.gameBoard[row+1][colum+1] == playerIcon and self.gameBoard[row+2][colum+2] == playerIcon and self.gameBoard[row+3][colum+3] == playerIcon: 
                     return True
         return False
 
     def chekWin(self, playerIcon):
         win = self.checkVerticalStreaks(playerIcon) or self.checkHorizontalStreaks(playerIcon) or self.checkMDiagonalStreaks( playerIcon) or self.checkSDiagonalStreaks(playerIcon)
         return win
+    def chekTie(self):
+        for row in range(6):
+            for col in range(7):
+                if (self.gameBoard[row][col]==0):
+                    return False
+        return True
+
+    def chekFinal(self, player1Icon, player2Icon):
+        if(self.chekWin(player2Icon)):
+            return 2
+        elif(self.chekWin(player1Icon)):
+            return 1
+        elif(self.chekTie()):
+            return 0
+        else:
+            return -1
 
     def getLastRow(self):
         return self.__lastRow
+
 
     def getTurn(self):
         return(self.turn)
 
     def setTurn(self,vl):
         self.turn = vl
+
+    def copy(self):
+        newGameBoard = []
+        for row in self.height:
+            cols = []
+            for col in self.width:
+                cols.append(self.gameBoard)
+            newGameBoard.append(cols)
+        return newGameBoard
+
+    def getMoves(self, board):
+        childrens = []
+        gameBoard = board.gameBoard
+        turno = board.getTurn()
+        for col in range(board.width):
+            row = board.height - 1
+            while ((gameBoard[row][col] != 0) and (row >= 0)):
+                row -= 1
+            if (row >= 0):
+                childrens.append(col)
+        return childrens
