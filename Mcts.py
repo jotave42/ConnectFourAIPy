@@ -18,8 +18,8 @@ class Node:
 
     def selection(self):
 
-        foo = lambda x: x.wins / x.visits + 9000000*np.sqrt(2 * np.log(self.visits) / x.visits)
-        foo2 = lambda x: x.loss / x.visits + 9000000*np.sqrt(2 * np.log(self.visits) / x.visits)
+        foo = lambda x: x.wins / x.visits + 100*np.sqrt(2 * np.log(self.visits) / x.visits)
+        foo2 = lambda x: x.loss / x.visits + 100*np.sqrt(2 * np.log(self.visits) / x.visits)
         foo3 = lambda x : (foo(x),foo2(x))
         return sorted(self.childNodes, key=foo3)[-1]
 
