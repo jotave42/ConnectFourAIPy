@@ -4,15 +4,15 @@ class Board():
     width = 7
     height = 6
     turn= 1
-    def __init__(self, gameBordToCopy = None,turnCopy = None):
+    def __init__(self, gameBoardToCopy = None,turnCopy = None):
         self.gameBoard=[]
         if(turnCopy!=None):
             self.turn = turnCopy
-        if(gameBordToCopy):
+        if(gameBoardToCopy):
             for row in range(6):
                 cols=[]
                 for col in range(7):
-                    cols.append(gameBordToCopy[row][col])
+                    cols.append(gameBoardToCopy[row][col])
                 self.gameBoard.append(cols)
         else:
             for row in range(6):
@@ -30,7 +30,7 @@ class Board():
             return True
         return False
 
-    def addPieceSumulation(self, col , player1Icon,player2Icon):
+    def addPieceSimulation(self, col , player1Icon,player2Icon):
         if(self.addable(col)):
             if(self.getTurn()==1):
                 self.gameBoard[self.__lastRow][col] = player1Icon
@@ -52,11 +52,11 @@ class Board():
             return self.__lastRow
         else:
             return -1
-    def showBord(self):
+    def showBoard(self):
         for row  in self.gameBoard:
             print(row)
 
-    def showBord(self,player1Icon,player2Icon):
+    def showBoard(self, player1Icon, player2Icon):
         print("\n=================")
         for row  in self.gameBoard:
             line = "[ "

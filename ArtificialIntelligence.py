@@ -131,6 +131,6 @@ class ArtificialIntelligence:
                 row -=1
             if(row>=0):
                 newChildren = Board(gameBoard,board.getTurn())
-                newChildren.addPieceSumulation(col,player1Icon,player2Icon)
+                newChildren.addPieceSimulation(col,player1Icon,player2Icon)
                 childrens.append((col,newChildren))
         return childrens
