@@ -40,6 +40,7 @@ def main():
         #aiCol = aI.getNextPosition(board,7,player1.playerIcon,player2.playerIcon)
 
         node, col = MCTS(board, 20000, player1.playerIcon, player2.playerIcon, currentNode=node, timeout=2, board = board)
+        print(col , "coluuuuuuunnnnnaaaa")
         piece = board.addPiece(col,player2.playerIcon)
         row = piece
         if (board.chekWin(player2.playerIcon)):

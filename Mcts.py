@@ -35,7 +35,8 @@ class Node:
     def expand(self, move, state,board):
         # return child when move is taken
         # remove move from current node
-        child = Node(move=move, parent=self, state=state, board=board)
+        boardcp = Board(board.gameBord, board.getTurn())
+        child = Node(move=move, parent=self, state=state, board=boardcp)
         self.untriedMoves.remove(move)
         self.childNodes.append(child)
         return child
@@ -89,7 +90,7 @@ def MCTS(currentState, itermax, player1Icon, player2Icon, currentNode=None, time
     print("AI\'s computed winning percentages")
     for node in sortedChildNodes:
         print('Move: %s    Win Rate: %.2f%%' % (node.move + 1, 100 * node.wins / node.visits))
-    print('Simulations performed: %s\n' % i)
+    print('Simulations performed: %s\n' % i)git 
     return rootnode, sortedChildNodes[0].move
 
 
