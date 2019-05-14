@@ -44,8 +44,7 @@ def main():
                 board.showBoard(player1.playerIcon, player2.playerIcon)
                 print("=====================MCTS=======================")
                 node = Node(state=board, board=board)
-                node, aiCol = MCTS(board, 1000000, player2.playerIcon, player1.playerIcon, curNode=node, timeBrk=10,
-                                   board=board)
+                node, aiCol = MCTS(board, 1000000, player2.playerIcon, player1.playerIcon, curNode=node, timeBrk=10,board=board)
                 piece = board.addPiece(aiCol, player1.playerIcon)
                 if (board.chekWin(player1.playerIcon)):
                     print("PLAYER MCTS GANHOU")
@@ -55,8 +54,7 @@ def main():
             elif (val == 2):
                 print("=====================MCTS=======================")
                 node = Node(state=board, board=board)
-                node, aiCol = MCTS(board, 1000000, player1.playerIcon, player2.playerIcon, curNode=node, timeBrk=10,
-                                   board=board)
+                node, aiCol = MCTS(board, 1000000, player1.playerIcon, player2.playerIcon, curNode=node, timeBrk=10, board=board)
                 piece = board.addPiece(aiCol, player2.playerIcon)
                 if (board.chekWin(player2.playerIcon)):
                     print("PLAYER MCTS GANHOU")
